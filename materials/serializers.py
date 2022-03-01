@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Material, MaterialInput, MaterialOutput
+from .models import Material, MaterialResupplyLog, MaterialRequestLog
 
 
 class MaterialSerializer(ModelSerializer):
@@ -8,13 +8,13 @@ class MaterialSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class MaterialOutputSerializer(ModelSerializer):
+class MaterialOutSerializer(ModelSerializer):
     class Meta:
-        model = MaterialOutput
+        model = MaterialRequestLog
         fields = "__all__"
 
 
-class MaterialInputSerializer(ModelSerializer):
+class MaterialInSerializer(ModelSerializer):
     class Meta:
-        model = MaterialInput
+        model = MaterialResupplyLog
         fields = "__all__"

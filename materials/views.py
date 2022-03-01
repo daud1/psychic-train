@@ -1,9 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
-from .models import Material, MaterialInput, MaterialOutput
+from .models import Material, MaterialResupplyLog, MaterialRequestLog
 from .serializers import (
     MaterialSerializer,
-    MaterialInputSerializer,
-    MaterialOutputSerializer,
+    MaterialInSerializer,
+    MaterialOutSerializer,
 )
 from rest_framework.pagination import PageNumberPagination
 
@@ -15,12 +15,12 @@ class MaterialViewset(ModelViewSet):
 
 
 class MaterialInputViewset(ModelViewSet):
-    queryset = MaterialInput.objects.all()
+    queryset = MaterialResupplyLog.objects.all()
     pagination_class = PageNumberPagination
-    serializer_class = MaterialInputSerializer
+    serializer_class = MaterialInSerializer
 
 
 class MaterialOutputViewset(ModelViewSet):
-    queryset = MaterialOutput.objects.all()
+    queryset = MaterialRequestLog.objects.all()
     pagination_class = PageNumberPagination
-    serializer_class = MaterialOutputSerializer
+    serializer_class = MaterialOutSerializer

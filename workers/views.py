@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from .serializers import WorkerSerializer, WorkerAttendanceSerializer
-from .models import Worker, WorkerAttendance
+from .models import Worker, WorkerAttendanceLog
 from rest_framework.pagination import PageNumberPagination
 
 
@@ -12,5 +12,5 @@ class WorkerViewset(ModelViewSet):
 
 class WorkerAttendanceViewset(ModelViewSet):
     serializer_class = WorkerAttendanceSerializer
-    queryset = WorkerAttendance.objects.all()
+    queryset = WorkerAttendanceLog.objects.all()
     pagination_class = PageNumberPagination

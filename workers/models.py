@@ -1,10 +1,14 @@
 import uuid
 
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class Worker(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
+    class Meta:
+        db_table = "worker"
+
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     first_name = models.CharField(max_length=128, blank=False, null=False)
     last_name = models.CharField(max_length=128, blank=False, null=False)
     date_of_birth = models.DateField(null=True, default=None)
@@ -14,6 +18,20 @@ class Worker(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
-class WorkerAttendance(models.Model):
+class WorkerAttendanceLog(models.Model):
+    class Meta:
+        db_table = "worker_attendance_log"
+
     arrival_time = models.TimeField()
     departure_time = models.TimeField()
+    worker = models.ForeignKey(to="Worker", on_delete=models.DO_NOTHING, null=False, blank=False)
+
+    def clean(self):
+        if self.departure_time < self.arrival_time:
+            raise ValidationError(
+                {"departure_time": ValidationError("Departure must occur after arrival.", code="invalid")}
+            )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super(WorkerAttendanceLog, self).save(*args, **kwargs)
