@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
-from .views import MaterialViewset, MaterialInputViewset, MaterialOutputViewset
+
+from .views import MaterialInputViewset, MaterialOutputViewset, MaterialViewset
 
 router = SimpleRouter()
 router.register("materials", MaterialViewset)

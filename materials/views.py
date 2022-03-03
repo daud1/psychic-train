@@ -1,11 +1,9 @@
-from rest_framework.viewsets import ModelViewSet
-from .models import Material, MaterialResupplyLog, MaterialRequestLog
-from .serializers import (
-    MaterialSerializer,
-    MaterialInSerializer,
-    MaterialOutSerializer,
-)
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.viewsets import ModelViewSet
+
+from .models import Material, MaterialRequestLog, MaterialResupplyLog
+from .serializers import (MaterialInSerializer, MaterialOutSerializer,
+                          MaterialSerializer)
 
 
 class MaterialViewset(ModelViewSet):

@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Material, MaterialResupplyLog, MaterialRequestLog
+
+from .models import Material, MaterialRequestLog, MaterialResupplyLog
 
 
 class MaterialSerializer(ModelSerializer):

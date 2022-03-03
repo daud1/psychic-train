@@ -9,53 +9,93 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Material',
+            name="Material",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('name', models.CharField(max_length=128)),
-                ('units', models.CharField(max_length=128)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("name", models.CharField(max_length=128)),
+                ("units", models.CharField(max_length=128)),
             ],
             options={
-                'db_table': 'material',
+                "db_table": "material",
             },
         ),
         migrations.CreateModel(
-            name='MaterialUnitPrice',
+            name="MaterialUnitPrice",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('unit_Px_ugx', models.PositiveIntegerField()),
-                ('material', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='materials.material')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("unit_Px_ugx", models.PositiveIntegerField()),
+                (
+                    "material",
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="materials.material"),
+                ),
             ],
             options={
-                'db_table': 'material_unit_price',
+                "db_table": "material_unit_price",
             },
         ),
         migrations.CreateModel(
-            name='MaterialResupplyLog',
+            name="MaterialResupplyLog",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('quantity', models.DecimalField(decimal_places=4, max_digits=16)),
-                ('material', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='materials.material')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("quantity", models.DecimalField(decimal_places=4, max_digits=16)),
+                (
+                    "material",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING, to="materials.material"
+                    ),
+                ),
             ],
             options={
-                'db_table': 'material_resupply_log',
+                "db_table": "material_resupply_log",
             },
         ),
         migrations.CreateModel(
-            name='MaterialRequestLog',
+            name="MaterialRequestLog",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('quantity', models.DecimalField(decimal_places=4, max_digits=16)),
-                ('status', models.CharField(choices=[('PENDING', 'Pending'), ('DENIED', 'Denied'), ('FULFILLED', 'Fulfilled')], default=None, max_length=32, null=True)),
-                ('material', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='materials.material')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("quantity", models.DecimalField(decimal_places=4, max_digits=16)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("PENDING", "Pending"), ("DENIED", "Denied"), ("FULFILLED", "Fulfilled")],
+                        default=None,
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    "material",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING, to="materials.material"
+                    ),
+                ),
             ],
             options={
-                'db_table': 'material_request_log',
+                "db_table": "material_request_log",
             },
         ),
     ]
