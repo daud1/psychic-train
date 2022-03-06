@@ -20,3 +20,25 @@ export function TabTitle(props) {
     </li>
   );
 }
+
+export function Pagination({ count, pagesCount, handlePrev, pageNo, handleNext }) {
+  return (
+    <nav aria-label="Page navigation example">
+      <ul className="pagination justify-content-center">
+        <li className={`page-item ${pageNo === 1 || pageNo === 0 ? 'disabled' : ''}`}>
+          <button className="page-link" tabindex="-1" onClick={handlePrev}>
+            Previous
+          </button>
+        </li>
+        <li className="page-item">
+          {count} Records &nbsp;| Page {pageNo} of {pagesCount}
+        </li>
+        <li className={`page-item ${pageNo === pagesCount || pageNo === 0 ? 'disabled' : ''}`}>
+          <button className="page-link" onClick={handleNext}>
+            Next
+          </button>
+        </li>
+      </ul>
+    </nav>
+  );
+}

@@ -1,13 +1,16 @@
 import React from 'react';
+import { Pagination } from './commonComponents';
 
 function Table(props) {
-  const { data } = props;
-  return data ? (
+  const {
+    data: { results, count, num_pages, previous, next, current },
+  } = props;
+  return results.length > 0 ? (
     <table className="table table-striped table-hover">
       <thead>
         <tr>
           <th scope="col">#</th>
-          {Object.keys(data[0]).map((key, index) => (
+          {Object.keys(results[0]).map((key, index) => (
             <th key={'head' + index} scope="col">
               {key}
             </th>
@@ -15,7 +18,7 @@ function Table(props) {
         </tr>
       </thead>
       <tbody>
-        {data.map((obj, index) => (
+        {results.map((obj, index) => (
           <tr>
             <th key={'rowC' + index} scope="row">
               {index}
@@ -26,6 +29,13 @@ function Table(props) {
           </tr>
         ))}
       </tbody>
+      <Pagination
+        count={count}
+        pagesCount={num_pages}
+        handleNext={next}
+        handlePrev={previous}
+        pageNo={current}
+      />
     </table>
   ) : (
     <p>No Records to display.</p>
