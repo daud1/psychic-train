@@ -1,4 +1,5 @@
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import (ModelSerializer, StringRelatedField,
+                                        ValidationError)
 
 from .models import Worker, WorkerAttendanceLog
 
@@ -10,8 +11,10 @@ class WorkerSerializer(ModelSerializer):
 
 
 class WorkerAttendanceSerializer(ModelSerializer):
+    worker = StringRelatedField()
+
     class Meta:
-        model = WorkerAttendanceLog()
+        model = WorkerAttendanceLog
         fields = "__all__"
 
     def validate(self, attrs):

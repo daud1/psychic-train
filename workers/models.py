@@ -17,6 +17,9 @@ class Worker(models.Model):
     def name(self):
         return f"{self.first_name} {self.last_name}"
 
+    def __str__(self):
+        return f"{str(self.id)[:8]}: {self.first_name} {self.last_name}"
+
 
 class WorkerAttendanceLog(models.Model):
     class Meta:
