@@ -1,10 +1,16 @@
 import React from 'react';
 import Table from './table';
+
 function RequisitionLogs(props) {
-  const { data } = props;
+  const { data, fetchList, resource } = props;
   return (
-    <div className="tab-pane fade" id="reqLogs" role="tabpanel" aria-labelledby="reqLogs-tab">
-      <Table data={data} />
+    <div
+      className="tab-pane fade table-responsive justify-content-center"
+      id="reqLogs"
+      role="tabpanel"
+      aria-labelledby="reqLogs-tab"
+    >
+      <Table data={data} fetchList={fetchList} resource={resource} />
     </div>
   );
 }

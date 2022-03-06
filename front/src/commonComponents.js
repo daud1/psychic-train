@@ -25,15 +25,17 @@ export function Pagination({ count, pagesCount, handlePrev, pageNo, handleNext }
   return (
     <nav aria-label="Page navigation example">
       <ul className="pagination justify-content-center">
-        <li className={`page-item ${pageNo === 1 || pageNo === 0 ? 'disabled' : ''}`}>
-          <button className="page-link" tabindex="-1" onClick={handlePrev}>
+        <li className={`m-2 page-item ${pageNo === 1 || pageNo === 0 ? 'disabled' : ''}`}>
+          <button className="page-link" tabIndex="-1" onClick={handlePrev}>
             Previous
           </button>
         </li>
-        <li className="page-item">
-          {count} Records &nbsp;| Page {pageNo} of {pagesCount}
+        <li className="m-2 page-item">
+          <span className="page-link text-reset">
+            {count} Records | Page {pageNo} of {pagesCount}
+          </span>
         </li>
-        <li className={`page-item ${pageNo === pagesCount || pageNo === 0 ? 'disabled' : ''}`}>
+        <li className={`m-2 page-item ${pageNo === pagesCount || pageNo === 0 ? 'disabled' : ''}`}>
           <button className="page-link" onClick={handleNext}>
             Next
           </button>
@@ -41,4 +43,15 @@ export function Pagination({ count, pagesCount, handlePrev, pageNo, handleNext }
       </ul>
     </nav>
   );
+}
+
+export function Loader({ loading }) {
+  return loading ? (
+    <div className="d-flex justify-content-center align-items-center modal">
+      <div className=" modal-backdrop opacity-25"></div>
+      <div className="spinner-grow text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  ) : null;
 }

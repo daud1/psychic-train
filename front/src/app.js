@@ -1,45 +1,60 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { TabTitle } from './commonComponents';
+import React, { useContext, useEffect, useState } from 'react';
+import { Loader, TabTitle } from './commonComponents';
+import { MainContext } from './mainContext';
 import Materials from './materials';
 import RequisitionLogs from './requisitionLogs';
 import TimeSheets from './timesheets';
 import Workers from './workers';
 
-
 function App() {
+  const { loading, setLoading } = useContext(MainContext);
   const [data, setData] = useState({
     workers: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
     attendance: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
     materials: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
     requests: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
   });
-  const fetchInitialData = async () => {
-    // setLoading(true);
+
+  const fetchList = async (resource, page = '') => {
     try {
+      setLoading(true);
+      const response = await axios.get(`http://localhost:8000/api/v1/${resource}/${page}`);
+      if (response.status === 200) {
+        setData({ ...data, [resource]: response.data });
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchInitialData = async () => {
+    try {
+      setLoading(true);
       let keys = ['workers', 'attendance', 'materials', 'requests'];
-      const res = await Promise.allSettled(
+      const response = await Promise.allSettled(
         keys.map((key) => axios.get(`http://localhost:8000/api/v1/${key}/`))
       );
-      const payload = res.map((res) => {
-        return res.status === 'fulfilled' ? res.value.data : null;
-      });
+      const payload = response.map((res) => (res.status === 'fulfilled' ? res.value.data : null));
       let _data = {};
       keys.forEach((key, index) => (_data[key] = payload[index]));
       setData(_data);
     } catch (e) {
       console.log(e);
-    } // finally {
-    //   setLoading(false);
-    // }
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => fetchInitialData(), []);
   return (
     <div className="container">
+      <Loader loading={loading} />
       <nav className="navbar navbar-light bg-light">
-        <a className="navbar-brand h1" href="#">
-          TUZIMBE
+        <a className="display-6 text-reset text-decoration-none" href="#">
+          tuzimbe.
         </a>
         <ul className="nav nav-pills justify-content-center" id="myTab" role="tablist">
           <TabTitle active id="workers" value="Workers" />
@@ -50,10 +65,10 @@ function App() {
       </nav>
 
       <div className="tab-content" id="myTabContent">
-        <Workers data={data.workers} />
-        <TimeSheets data={data.attendance} />
-        <Materials data={data.materials} />
-        <RequisitionLogs data={data.requests} />
+        <Workers data={data.workers} fetchList={fetchList} resource="workers" />
+        <TimeSheets data={data.attendance} fetchList={fetchList} resource="attendance" />
+        <Materials data={data.materials} fetchList={fetchList} resource="materials" />
+        <RequisitionLogs data={data.requests} fetchList={fetchList} resource="requests" />
       </div>
     </div>
   );
