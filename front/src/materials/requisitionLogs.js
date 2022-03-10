@@ -1,18 +1,18 @@
 import React from 'react';
-import Table from './table';
+import { Table } from '../common';
 
-function TimeSheets(props) {
+function RequisitionLogs(props) {
   const { data, fetchList, resource } = props;
   return (
     <div
       className="tab-pane fade table-responsive justify-content-center"
-      id="timesheets"
+      id="reqLogs"
       role="tabpanel"
-      aria-labelledby="timesheets-tab"
+      aria-labelledby="reqLogs-tab"
     >
       <Table data={data} fetchList={fetchList} resource={resource} />
     </div>
   );
 }
 
-export default TimeSheets;
+export default RequisitionLogs;

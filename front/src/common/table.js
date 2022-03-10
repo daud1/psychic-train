@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pagination } from './commonComponents';
+import {Pagination} from './components';
 
 function Table(props) {
   const {
