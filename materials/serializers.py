@@ -6,7 +6,7 @@ from .models import Material, MaterialRequestLog, MaterialResupplyLog
 class MaterialSerializer(ModelSerializer):
     class Meta:
         model = Material
-        fields = "__all__"
+        fields = ["id", "name", "units", "unit_price"]
 
 
 class MaterialOutSerializer(ModelSerializer):

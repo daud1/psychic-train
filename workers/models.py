@@ -12,6 +12,7 @@ class Worker(models.Model):
     first_name = models.CharField(max_length=128, blank=False, null=False)
     last_name = models.CharField(max_length=128, blank=False, null=False)
     date_of_birth = models.DateField(null=True, default=None)
+    daily_rate_ugx = models.PositiveIntegerField(null=True)
 
     @property
     def name(self):

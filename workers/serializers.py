@@ -19,5 +19,5 @@ class WorkerAttendanceSerializer(ModelSerializer):
 
     def validate(self, attrs):
         if attrs["departure_time"] < attrs["arrival_time"]:
-            raise ValidationError({"departure_time": "Departure must be after Arrival time!"})
+            raise ValidationError({"departure_time": "Departure time must be after Arrival!"})
         return attrs
