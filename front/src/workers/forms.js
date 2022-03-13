@@ -4,11 +4,11 @@ import { Input, SubmitButton, ValidationSchema } from '../common/forms';
 
 const { WORKER_SCHEMA, TIMESHEET_SCHEMA } = ValidationSchema;
 const today = new Date();
-const date = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+const date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
 
 function AddWorkerForm({ onSubmit }) {
   return (
-    <div
+  <div
       className="modal fade"
       id="addWorkerForm"
       data-bs-backdrop="false"
@@ -32,40 +32,24 @@ function AddWorkerForm({ onSubmit }) {
               onSubmit={(values) => onSubmit(values)}
             >
               <Form>
-                <Input label="First Name" type="text" name="first_name" as="input" className="form-control" />
-                <Input label="Last Name" type="text" name="last_name" as="input" className="form-control" />
-                <Input
-                  label="Date of Birth"
-                  type="date"
-                  name="date_of_birth"
-                  as="input"
-                  className="form-control"
-                />
-                <Input
-                  label="Daily Rate"
-                  type="number"
-                  name="daily_rate_ugx"
-                  as="input"
-                  className="form-control"
-                />
+                <Input label="First Name" type="text" name="first_name" as="input" />
+                <Input label="Last Name" type="text" name="last_name" as="input" />
+                <Input label="Date of Birth" type="date" name="date_of_birth" as="input" />
+                <Input label="Daily Rate" type="number" name="daily_rate_ugx" as="input" />
                 <SubmitButton value="Register Worker" />
               </Form>
             </Formik>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>)
+  ;
 }
 
 function LogHoursForm(props) {
   const { handleSubmit, workerID, fetchLastLog } = props;
   const [lastLog, setLastLog] = useState(null);
-  const _fetchLastLog = async () => {
-    const log = await fetchLastLog(workerID);
-    setLastLog(log);
-  };
-  useEffect(() => _fetchLastLog(),[]);
+  useEffect(() => setLastLog(fetchLastLog(workerID)), []);
   return (
     <div
       className="modal fade"
@@ -85,28 +69,30 @@ function LogHoursForm(props) {
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div className="modal-body">
-            <Formik
-              initialValues={{
-                worker: workerID,
-                arrival_time: lastLog ? lastLog.arrival_time : '',
-                departure_time: '',
-                date: date
-              }}
-              validationSchema={TIMESHEET_SCHEMA}
-              onSubmit={(values) => {
-                values.worker = workerID;
-                handleSubmit(values);
-              }}
-            >
-              {({ errors }) => (
-                <Form>
-                  {console.log(errors)}
-                  <Input label="Time In *" type="time" name="arrival_time" className="form-control" />
-                  <Input label="Time Out" type="time" name="departure_time" className="form-control" />
-                  <SubmitButton value="Log Hours" />
-                </Form>
-              )}
-            </Formik>
+            {lastLog && lastLog.departure_time ? <p>Already Logged Time!</p> : (
+              <Formik
+                initialValues={{
+                  worker: workerID,
+                  arrival_time: lastLog ? lastLog.arrival_time : '',
+                  departure_time: '',
+                  date: date,
+                }}
+                validationSchema={TIMESHEET_SCHEMA}
+                onSubmit={(values) => {
+                  values.worker = workerID;
+                  handleSubmit(values);
+                }}
+              >
+                {({ errors }) => (
+                  <Form>
+                    {console.log(errors)}
+                    <Input label="Time In *" type="time" name="arrival_time" />
+                    <Input label="Time Out" type="time" name="departure_time" />
+                    <SubmitButton value="Log Hours" />
+                  </Form>
+                )}
+              </Formik>
+            )}
           </div>
         </div>
       </div>

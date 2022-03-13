@@ -11,11 +11,7 @@ function Materials(props) {
       role="tabpanel"
       aria-labelledby="materials-tab"
     >
-      <div
-        className="btn-toolbar justify-content-center"
-        role="toolbar"
-        aria-label="Toolbar with button groups"
-      >
+      <div className="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
         <div className="btn-group" role="group">
           <button
             type="button"

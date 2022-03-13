@@ -7,6 +7,7 @@ a construction site app to keep track of worker-attendance and building material
 #### Pre-requisites
 - python
 - postgresql
+- nodejs
 
 
 #### Steps
@@ -29,4 +30,9 @@ a construction site app to keep track of worker-attendance and building material
 4. run the server with the command below and visit http://localhost:8000 in your browser.
   ```bash
   python manage.py runserver
+  ```
+
+5. Switch to /front and run the following command to start the React frontend
+  ```bash
+  yarn run start
   ```

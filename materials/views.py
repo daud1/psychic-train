@@ -3,7 +3,12 @@ from rest_framework.viewsets import ModelViewSet
 from paginator import Paginator
 
 from .models import Material, MaterialRequestLog, MaterialResupplyLog, MaterialUnitPrice
-from .serializers import MaterialInSerializer, MaterialOutSerializer, MaterialSerializer
+from .serializers import (
+    MaterialInSerializer,
+    MaterialOutSerializer,
+    MaterialOutReadSerializer,
+    MaterialSerializer,
+)
 
 
 class MaterialViewset(ModelViewSet):
@@ -28,3 +33,8 @@ class MaterialOutputViewset(ModelViewSet):
     queryset = MaterialRequestLog.objects.all()
     pagination_class = Paginator
     serializer_class = MaterialOutSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retrieve":
+            return MaterialOutReadSerializer
+        return super().get_serializer_class()

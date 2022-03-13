@@ -1,4 +1,5 @@
 import uuid
+from datetime import date
 
 from django.db import models
 
@@ -46,4 +47,5 @@ class MaterialRequestLog(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     material = models.ForeignKey(to="Material", on_delete=models.DO_NOTHING)
     quantity = models.DecimalField(decimal_places=4, max_digits=16)
-    status = models.CharField(max_length=32, choices=REQ_STATUS.choices, default=None, null=True)
+    status = models.CharField(max_length=32, choices=REQ_STATUS.choices, default="PENDING", null=True)
+    date_requested = models.DateField(default=date.today, null=False)

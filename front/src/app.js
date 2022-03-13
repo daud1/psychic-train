@@ -116,6 +116,7 @@ function App() {
           label="RequisitionLogs"
           data={requests}
           fetchList={(page) => fetchList('requests', requests, setRequests, page)}
+          requestMaterialsAPI={(values) => addItem('requests', values, requests, setRequests)}
         />
       </Tabs>
     </div>

@@ -10,11 +10,17 @@ class MaterialSerializer(ModelSerializer):
 
 
 class MaterialOutSerializer(ModelSerializer):
+    class Meta:
+        model = MaterialRequestLog
+        fields = "__all__"
+
+
+class MaterialOutReadSerializer(ModelSerializer):
     material = StringRelatedField()
 
     class Meta:
         model = MaterialRequestLog
-        fields = ["id", "material", "status", "quantity"]
+        fields = ["id", "material", "status", "quantity", "date_requested"]
 
 
 class MaterialInSerializer(ModelSerializer):

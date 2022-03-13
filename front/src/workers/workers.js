@@ -16,7 +16,7 @@ function Workers(props) {
       role="tabpanel"
       aria-labelledby="workers-tab"
     >
-      <div className="btn-toolbar justify-content-center" role="toolbar" aria-label="actions-toolbar">
+      <div className="btn-toolbar" role="toolbar" aria-label="actions-toolbar">
         <div className="btn-group" role="group">
           <button
             type="button"

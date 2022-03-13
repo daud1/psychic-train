@@ -17,6 +17,11 @@ const ValidationSchema = {
     arrival_time: Yup.string(),
     departure_time: Yup.string(),
   }),
+  REQUEST_SCHEMA: Yup.object().shape({
+    material_id: Yup.string().required('Required!'),
+    quantity: Yup.number().required('Required!'),
+    date_requested: Yup.date().nullable('True'),
+  }),
 };
 
 export default ValidationSchema;
