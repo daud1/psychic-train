@@ -1,4 +1,4 @@
-import { Loader, Pagination, TabTitle } from './components';
+import { Loader, Pagination, Tabs } from './components';
 import Table from './table';
 
-export { Loader, Pagination, Table, TabTitle };
+export { Loader, Pagination, Table, Tabs };

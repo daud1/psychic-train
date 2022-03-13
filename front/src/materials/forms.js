@@ -8,7 +8,7 @@ function AddMaterialForm({ onSubmit }) {
     <div
       className="modal fade"
       id="addMaterialForm"
-      data-bs-backdrop="static"
+      data-bs-backdrop="false"
       data-bs-keyboard="false"
       tabIndex="-1"
       aria-labelledby="addMaterialFormLabel"

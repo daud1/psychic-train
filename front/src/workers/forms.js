@@ -1,15 +1,17 @@
 import { Form, Formik } from 'formik';
-import React from 'react';
-import { ValidationSchema, Input, SubmitButton } from '../common/forms';
+import React, { useEffect, useState } from 'react';
+import { Input, SubmitButton, ValidationSchema } from '../common/forms';
 
 const { WORKER_SCHEMA, TIMESHEET_SCHEMA } = ValidationSchema;
+const today = new Date();
+const date = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
 
 function AddWorkerForm({ onSubmit }) {
   return (
     <div
       className="modal fade"
       id="addWorkerForm"
-      data-bs-backdrop="static"
+      data-bs-backdrop="false"
       data-bs-keyboard="false"
       tabIndex="-1"
       aria-labelledby="addWorkerFormLabel"
@@ -56,42 +58,55 @@ function AddWorkerForm({ onSubmit }) {
   );
 }
 
-function LogTimeInForm({ onSubmit }) {
+function LogHoursForm(props) {
+  const { handleSubmit, workerID, fetchLastLog } = props;
+  const [lastLog, setLastLog] = useState(null);
+  const _fetchLastLog = async () => {
+    const log = await fetchLastLog(workerID);
+    setLastLog(log);
+  };
+  useEffect(() => _fetchLastLog(),[]);
   return (
     <div
       className="modal fade"
-      id="clockInForm"
-      // data-bs-backdrop="static"
+      id="logHoursForm"
+      data-bs-backdrop="false"
       data-bs-keyboard="false"
       tabIndex="-1"
-      aria-labelledby="clockInFormLabel"
+      aria-labelledby="logHoursFormLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="clockInFormLabel">
-              Log Arrival Time
+            <h5 className="modal-title" id="logHoursFormLabel">
+              Log Work Hours
             </h5>
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div className="modal-body">
             <Formik
-              initialValues={{ worker_id: '', arrival_time: '' }}
+              initialValues={{
+                worker: workerID,
+                arrival_time: lastLog ? lastLog.arrival_time : '',
+                departure_time: '',
+                date: date
+              }}
               validationSchema={TIMESHEET_SCHEMA}
-              onSubmit={(values) => onSubmit(values)}
+              onSubmit={(values) => {
+                values.worker = workerID;
+                handleSubmit(values);
+              }}
             >
-              <Form>
-                <Input label="Worker" type="text" name="worker_id" className="form-control" />
-                <Input label="Time In" type="time" name="arrival_time" className="form-control" />
-                <SubmitButton value="Check In" />
-              </Form>
+              {({ errors }) => (
+                <Form>
+                  {console.log(errors)}
+                  <Input label="Time In *" type="time" name="arrival_time" className="form-control" />
+                  <Input label="Time Out" type="time" name="departure_time" className="form-control" />
+                  <SubmitButton value="Log Hours" />
+                </Form>
+              )}
             </Formik>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-primary">
-              Save
-            </button>
           </div>
         </div>
       </div>
@@ -99,47 +114,4 @@ function LogTimeInForm({ onSubmit }) {
   );
 }
 
-function LogTimeOutForm({ onSubmit }) {
-  return (
-    <div
-      className="modal fade"
-      id="clockOutForm"
-      // data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabIndex="-1"
-      aria-labelledby="clockOutFormLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="clockOutFormLabel">
-              Log Departure Time
-            </h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div className="modal-body">
-            <Formik
-              initialValues={{ worker_id: '', departure_time: '' }}
-              validationSchema={TIMESHEET_SCHEMA}
-              onSubmit={(values) => onSubmit(values)}
-            >
-              <Form>
-                <Input label="Worker" type="text" name="worker_id" className="form-control" />
-                <Input label="Time Out" type="time" name="departure_time" className="form-control" />
-                <SubmitButton value="Check Out" />
-              </Form>
-            </Formik>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-primary">
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export { AddWorkerForm, LogTimeInForm, LogTimeOutForm };
+export { AddWorkerForm, LogHoursForm };

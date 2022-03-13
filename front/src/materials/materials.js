@@ -3,10 +3,10 @@ import { Table } from '../common';
 import { AddMaterialForm } from './forms';
 
 function Materials(props) {
-  const { data, fetchList, resource, addMaterialAPI } = props;
+  const { data, fetchList, addMaterialAPI } = props;
   return (
     <div
-      className="tab-pane fade table-responsive justify-content-center"
+      className="tab-pane fade active table-responsive justify-content-center show"
       id="materials"
       role="tabpanel"
       aria-labelledby="materials-tab"
@@ -28,7 +28,7 @@ function Materials(props) {
         </div>
       </div>
       <AddMaterialForm onSubmit={addMaterialAPI} />
-      <Table data={data} fetchList={fetchList} resource={resource} />
+      <Table data={data} fetchList={fetchList} />
     </div>
   );
 }

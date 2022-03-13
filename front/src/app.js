@@ -1,26 +1,32 @@
 import axios from 'axios';
-import $ from 'jquery';
 import React, { useContext, useEffect, useState } from 'react';
-import { Loader, TabTitle } from './common';
+import { Loader, Tabs } from './common';
 import { MainContext } from './mainContext';
 import { Materials, RequisitionLogs } from './materials';
 import { TimeSheets, Workers } from './workers';
 const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1/';
 function App() {
   const { loading, setLoading } = useContext(MainContext);
-  const [data, setData] = useState({
+  const [workers, setWorkers] = useState({
     workers: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
+  });
+  const [attendance, setAttendance] = useState({
     attendance: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
+  });
+  const [materials, setMaterials] = useState({
     materials: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
+  });
+  const [requests, setRequests] = useState({
     requests: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
   });
 
-  const fetchList = async (resource, page = '') => {
+  const fetchList = async (resource, data, setter, page = '') => {
     try {
       setLoading(true);
       const response = await axios.get(`${baseURL}${resource}/${page}`);
       if (response.status === 200) {
-        setData({ ...data, [resource]: response.data });
+        const _data = JSON.parse(JSON.stringify(data));
+        setter({ ..._data, ...response.data });
       }
     } catch (e) {
       console.log(e);
@@ -29,25 +35,33 @@ function App() {
     }
   };
 
-  const addItem = async (resource, payload, handleClose = null) => {
-    const { [resource]: temp } = data;
-    let _temp = JSON.parse(JSON.stringify(data));
+  const addItem = async (resource, payload, data, setter) => {
     try {
       setLoading(true);
       const response = await axios.post(`${baseURL}${resource}/`, payload);
-      if (response.status == 201) {
-        const _data = JSON.parse(JSON.stringify(temp));
+      if (response.status === 201) {
+        const _data = JSON.parse(JSON.stringify(data));
         _data.results.unshift(response.data);
         _data.count += 1;
-        _temp[resource] = _data;
-        setData(_temp);
+        setter(_data);
       }
     } catch (e) {
       console.log(e);
     } finally {
-      if (handleClose !== null) {
-        handleClose();
+      setLoading(false);
+    }
+  };
+
+  const fetchItem = async (resource, id) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${baseURL}${resource}/${id}`);
+      if (response.status === 200) {
+        return response.data;
       }
+    } catch (e) {
+      console.log(e);
+    } finally {
       setLoading(false);
     }
   };
@@ -56,11 +70,15 @@ function App() {
     try {
       setLoading(true);
       let keys = ['workers', 'attendance', 'materials', 'requests'];
-      const response = await Promise.allSettled(keys.map((key) => axios.get(`${baseURL}${key}/`)));
-      const payload = response.map((res) => (res.status === 'fulfilled' ? res.value.data : null));
-      let _data = {};
-      keys.forEach((key, index) => (_data[key] = payload[index]));
-      setData(_data);
+      let DATA = { workers, attendance, materials, requests };
+      let SETTERS = {
+        workers: setWorkers,
+        attendance: setAttendance,
+        materials: setMaterials,
+        requests: setRequests,
+      };
+      let calls = keys.map((key) => fetchList(key, DATA[key], SETTERS[key]));
+      let _ = await Promise.allSettled(calls);
     } catch (e) {
       console.log(e);
     } finally {
@@ -72,42 +90,34 @@ function App() {
   return (
     <div className="container">
       <Loader loading={loading} />
-      <nav className="navbar navbar-light bg-light">
-        <a className="display-6 text-reset text-decoration-none" href="#">
-          tuzimbe.
-        </a>
-        <ul className="nav nav-pills justify-content-center" id="myTab" role="tablist">
-          <TabTitle active id="workers" value="Workers" />
-          <TabTitle id="timesheets" value="TimeSheets" />
-          <TabTitle id="materials" value="Materials" />
-          <TabTitle id="reqLogs" value="Requisition Logs" />
-        </ul>
-      </nav>
-
-      {!loading && (
-        <div className="tab-content" id="myTabContent">
-          <Workers
-            data={data.workers}
-            fetchList={fetchList}
-            resource="workers"
-            addWorkerAPI={(values) => addItem('workers', values)}
-          />
-          <TimeSheets
-            data={data.attendance}
-            fetchList={fetchList}
-            resource="attendance"
-            checkInAPI={(values) => addItem('attendance', values)}
-            checkOutAPI={(values) => addItem('attendance', values)}
-          />
-          <Materials
-            data={data.materials}
-            fetchList={fetchList}
-            resource="materials"
-            addMaterialAPI={(values) => addItem('materials', values)}
-          />
-          <RequisitionLogs data={data.requests} fetchList={fetchList} resource="requests" />
-        </div>
-      )}
+      <Tabs>
+        <Workers
+          label="Workers"
+          data={workers}
+          fetchList={(page) => fetchList('workers', workers, setWorkers, page)}
+          addWorkerAPI={(values) => addItem('workers', values, workers, setWorkers)}
+          logHoursAPI={{
+            add: (values) => addItem('attendance', values, attendance, setAttendance),
+            getOne: (id) => fetchItem('attendance', id),
+          }}
+        />
+        <TimeSheets
+          label="TimeSheets"
+          data={attendance}
+          fetchList={(page) => fetchList('timesheets', attendance, setAttendance, page)}
+        />
+        <Materials
+          label="Materials"
+          data={materials}
+          fetchList={(page) => fetchList('materials', materials, setMaterials, page)}
+          addMaterialAPI={(values) => addItem('materials', values, materials, setMaterials)}
+        />
+        <RequisitionLogs
+          label="RequisitionLogs"
+          data={requests}
+          fetchList={(page) => fetchList('requests', requests, setRequests, page)}
+        />
+      </Tabs>
     </div>
   );
 }

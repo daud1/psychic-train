@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function Loader({ loading }) {
   return loading ? (
@@ -35,24 +35,48 @@ function Pagination({ count, pagesCount, handlePrev, pageNo, handleNext }) {
   );
 }
 
-function TabTitle(props) {
-  const { id, value, active } = props;
+function Tab(props) {
+  const { label, active, onClick } = props;
   const _active = active ? ' active' : '';
   return (
     <li className="nav-item" role="presentation">
-      <button
-        className={'nav-link' + _active}
-        id={id + '-tab'}
-        data-bs-toggle="tab"
-        data-bs-target={'#' + id}
-        type="button"
-        role="tab"
-        aria-controls={id}
-        aria-selected="true"
-      >
-        {value}
+      <button onClick={() => onClick(label)} className={'nav-link' + _active} type="button" role="tab">
+        {label}
       </button>
     </li>
   );
 }
-export {Loader, Pagination, TabTitle} 
+
+function Tabs({ children }) {
+  const [activeTab, setActiveTab] = useState(children[0].props.label);
+
+  return (
+    <>
+      <nav className="navbar navbar-light bg-light">
+        <a className="display-6 text-reset text-decoration-none" href="#">
+          tuzimbe.
+        </a>
+        <ul className="nav nav-pills justify-content-center" role="tablist">
+          {children.map((child) => {
+            const { label } = child.props;
+            return label !== '' ? (
+              <Tab
+                active={activeTab === label}
+                key={label}
+                label={label}
+                onClick={() => setActiveTab(label)}
+              />
+            ) : null;
+          })}
+        </ul>
+      </nav>
+
+      <div className="tab-content">
+        {children.map((child) => {
+          return child.props.label === activeTab ? child : undefined;
+        })}
+      </div>
+    </>
+  );
+}
+export { Loader, Pagination, Tab, Tabs };

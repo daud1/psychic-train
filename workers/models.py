@@ -29,6 +29,7 @@ class WorkerAttendanceLog(models.Model):
     arrival_time = models.TimeField()
     departure_time = models.TimeField()
     worker = models.ForeignKey(to="Worker", on_delete=models.DO_NOTHING, null=False, blank=False)
+    date = models.DateField(auto_now_add=True, null=True)
 
     def clean(self):
         if self.departure_time < self.arrival_time:
