@@ -2,6 +2,8 @@
 Django settings for tuzimbe_api project.
 """
 import os
+import django_heroku
+import dj_database_url
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -62,13 +64,9 @@ TEMPLATES = [
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASS"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": "5432",
     }
 }
+DATABASES["default"] = dj_database_url.parse(os.getenv("DATABASE_URL"), ssl_require=False)
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -87,3 +85,4 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 50,
 }
+django_heroku.settings(locals())
