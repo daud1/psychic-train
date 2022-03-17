@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/psychic-train/static/css/main.564f93a5.css",
-    "main.js": "/psychic-train/static/js/main.812184e5.js",
+    "main.js": "/psychic-train/static/js/main.d573c560.js",
     "index.html": "/psychic-train/index.html",
     "main.564f93a5.css.map": "/psychic-train/static/css/main.564f93a5.css.map",
-    "main.812184e5.js.map": "/psychic-train/static/js/main.812184e5.js.map"
+    "main.d573c560.js.map": "/psychic-train/static/js/main.d573c560.js.map"
   },
   "entrypoints": [
     "static/css/main.564f93a5.css",
-    "static/js/main.812184e5.js"
+    "static/js/main.d573c560.js"
   ]
 }
