@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -18,6 +19,17 @@ class WorkerAttendanceViewset(ModelViewSet):
     serializer_class = WorkerAttendanceSerializer
     queryset = WorkerAttendanceLog.objects.all()
     pagination_class = Paginator
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = self.perform_create(serializer)
+        serializer = WorkerAttendanceReadSerializer(instance=instance)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def get_serializer_class(self):
         if self.action == "list" or self.action == "retrieve":
