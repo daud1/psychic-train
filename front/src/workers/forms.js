@@ -1,18 +1,16 @@
 import { Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Input, SubmitButton, ValidationSchema } from '../common/forms';
 
 const { WORKER_SCHEMA, TIMESHEET_SCHEMA } = ValidationSchema;
 const today = new Date();
 const date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
 
-function AddWorkerForm({ onSubmit }) {
+function AddWorkerForm({ handleSubmit, handleClose }) {
   return (
-  <div
-      className="modal fade"
+    <div
+      className="card card-form"
       id="addWorkerForm"
-      data-bs-backdrop="false"
-      data-bs-keyboard="false"
       tabIndex="-1"
       aria-labelledby="addWorkerFormLabel"
       aria-hidden="true"
@@ -23,13 +21,13 @@ function AddWorkerForm({ onSubmit }) {
             <h5 className="modal-title" id="addWorkerFormLabel">
               Register New Worker
             </h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" className="btn-close" onClick={handleClose} aria-label="Close"></button>
           </div>
           <div className="modal-body">
             <Formik
               initialValues={{ last_name: '', first_name: '', date_of_birth: '', daily_rate_ugx: 0 }}
               validationSchema={WORKER_SCHEMA}
-              onSubmit={(values) => onSubmit(values)}
+              onSubmit={(values) => handleSubmit(values)}
             >
               <Form>
                 <Input label="First Name" type="text" name="first_name" as="input" />
@@ -42,59 +40,50 @@ function AddWorkerForm({ onSubmit }) {
           </div>
         </div>
       </div>
-    </div>)
-  ;
+    </div>
+  );
 }
 
 function LogHoursForm(props) {
-  const { handleSubmit, workerID, fetchLastLog } = props;
-  const [lastLog, setLastLog] = useState(null);
-  useEffect(() => setLastLog(fetchLastLog(workerID)), []);
+  const { handleSubmit, workerID, lastLog, handleClose } = props;
   return (
-    <div
-      className="modal fade"
-      id="logHoursForm"
-      data-bs-backdrop="false"
-      data-bs-keyboard="false"
-      tabIndex="-1"
-      aria-labelledby="logHoursFormLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="logHoursFormLabel">
-              Log Work Hours
-            </h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div className="modal-body">
-            {lastLog && lastLog.departure_time ? <p>Already Logged Time!</p> : (
-              <Formik
-                initialValues={{
-                  worker: workerID,
-                  arrival_time: lastLog ? lastLog.arrival_time : '',
-                  departure_time: '',
-                  date: date,
-                }}
-                validationSchema={TIMESHEET_SCHEMA}
-                onSubmit={(values) => {
-                  values.worker = workerID;
-                  handleSubmit(values);
-                }}
-              >
-                {({ errors }) => (
-                  <Form>
-                    {console.log(errors)}
-                    <Input label="Time In *" type="time" name="arrival_time" />
-                    <Input label="Time Out" type="time" name="departure_time" />
-                    <SubmitButton value="Log Hours" />
-                  </Form>
-                )}
-              </Formik>
-            )}
-          </div>
-        </div>
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" id="logHoursFormLabel">
+          Log Work Hours
+        </h5>
+        <button type="button" className="btn-close" onClick={handleClose} aria-label="Close"></button>
+      </div>
+      <div className="modal-body">
+        {lastLog && lastLog.departure_time ? (
+          <p>Done for Today!</p>
+        ) : (
+          <Formik
+            initialValues={{
+              worker: workerID,
+              arrival_time: lastLog ? lastLog.arrival_time : null,
+              departure_time: null,
+              date: date,
+            }}
+            validationSchema={TIMESHEET_SCHEMA}
+            onSubmit={(values) => {
+              values.worker = workerID;
+              handleSubmit(values);
+            }}
+          >
+            {({ values, errors }) => {
+              values.worker = workerID;
+              return (
+                <Form>
+                  {console.log(errors)}
+                  <Input label="Time In *" type="time" name="arrival_time" />
+                  <Input label="Time Out" type="time" name="departure_time" />
+                  <SubmitButton value="Log Hours" />
+                </Form>
+              );
+            }}
+          </Formik>
+        )}
       </div>
     </div>
   );

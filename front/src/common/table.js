@@ -4,14 +4,12 @@ import { Pagination } from './components';
 function Table(props) {
   const {
     fetchList,
-    Extra,
+    actions,
     data: { results, count, num_pages, previous, next, current },
   } = props;
-  const [activeObjId, setActiveObjId] = useState(null);
 
   return results && results.length > 0 ? (
     <>
-      {Extra && activeObjId !== null ? Extra(activeObjId) : null}
       <table className="table table-striped table-hover">
         <thead>
           <tr key="titleRow">
@@ -20,7 +18,7 @@ function Table(props) {
                 {key}
               </th>
             ))}
-            {Extra ? <th>Actions</th> : null}
+            {actions ? <th>Actions</th> : null}
           </tr>
         </thead>
         <tbody className="justify-content-center">
@@ -31,19 +29,20 @@ function Table(props) {
                   {k === 'id' && typeof v === 'string' ? v.slice(0, 8) : v}
                 </td>
               ))}
-              {Extra ? (
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#logHoursForm"
-                    onClick={() => setActiveObjId(obj.id)}
-                  >
-                    Log Hours
-                  </button>
-                </td>
-              ) : null}
+              <td>
+                {actions && Object.keys(actions).length > 0
+                  ? Object.entries(actions).map(([label, func], index) => (
+                      <button
+                        key={'actBTN' + index}
+                        type="button"
+                        className="btn btn-outline-primary"
+                        onClick={() => func(obj.id)}
+                      >
+                        {label}
+                      </button>
+                    ))
+                  : null}
+              </td>
             </tr>
           ))}
         </tbody>

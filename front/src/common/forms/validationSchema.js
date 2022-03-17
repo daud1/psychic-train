@@ -13,9 +13,9 @@ const ValidationSchema = {
     daily_rate_ugx: Yup.number('Enter daily rate(UGX) in numbers'),
   }),
   TIMESHEET_SCHEMA: Yup.object().shape({
-    worker_id: Yup.string().required('Required'),
+    worker: Yup.string().required('Required'),
     arrival_time: Yup.string(),
-    departure_time: Yup.string(),
+    departure_time: Yup.string().nullable(true),
   }),
   REQUEST_SCHEMA: Yup.object().shape({
     material_id: Yup.string().required('Required!'),

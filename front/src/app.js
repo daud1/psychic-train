@@ -35,19 +35,22 @@ function App() {
     }
   };
 
-  const addItem = async (resource, payload, data, setter) => {
+  const addItem = async (resource, payload, data, setter, cleanUp = null) => {
     try {
       setLoading(true);
       const response = await axios.post(`${baseURL}${resource}/`, payload);
       if (response.status === 201) {
         const _data = JSON.parse(JSON.stringify(data));
-        _data.results.unshift(response.data);
+        _data.results = [response.data, ..._data.results];
         _data.count += 1;
         setter(_data);
       }
     } catch (e) {
       console.log(e);
     } finally {
+      if (cleanUp !== null) {
+        cleanUp();
+      }
       setLoading(false);
     }
   };
@@ -95,9 +98,9 @@ function App() {
           label="Workers"
           data={workers}
           fetchList={(page) => fetchList('workers', workers, setWorkers, page)}
-          addWorkerAPI={(values) => addItem('workers', values, workers, setWorkers)}
+          addWorkerAPI={(values, cleanUp) => addItem('workers', values, workers, setWorkers, cleanUp)}
           logHoursAPI={{
-            add: (values) => addItem('attendance', values, attendance, setAttendance),
+            add: (values, cleanUp) => addItem('attendance', values, attendance, setAttendance, cleanUp),
             getOne: (id) => fetchItem('attendance', id),
           }}
         />
