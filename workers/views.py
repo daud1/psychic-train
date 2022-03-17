@@ -40,5 +40,7 @@ class WorkerAttendanceViewset(ModelViewSet):
 @api_view(["GET"])
 def get_last_log(request, worker_id):
     last_log = WorkerAttendanceLog.objects.filter(worker=worker_id, date=date.today()).first()
-    serializer = WorkerAttendanceReadSerializer(instance=last_log)
-    return Response(serializer.data)
+    if last_log is not None:
+        serializer = WorkerAttendanceReadSerializer(instance=last_log)
+        return Response(serializer.data)
+    return Response({})

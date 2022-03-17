@@ -63,14 +63,14 @@ function RequestMaterialForm({ onSubmit }) {
           </div>
           <div className="modal-body">
             <Formik
-              initialValues={{ material_id: '', quantity: '', date_requested: '' }}
+              initialValues={{ material: '', quantity: '', date_requested: '' }}
               validationSchema={REQUEST_SCHEMA}
               onSubmit={(values) => onSubmit(values)}
             >
               {({ errors }) => (
                 <Form>
                   {console.log(errors)}
-                  <Input label="Material" type="text" name="material_id" as="input" />
+                  <Input label="Material" type="text" name="material" as="input" />
                   <Input label="Quantity" type="number" name="quantity" as="input" />
                   <Input label="Date Requested" type="date" name="date_requested" as="input" />
                   <SubmitButton value="Submit Request" />
