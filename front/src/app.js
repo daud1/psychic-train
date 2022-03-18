@@ -1,12 +1,16 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Loader, Tabs } from './common';
+import Dashboard from './dashboard';
 import { MainContext } from './mainContext';
 import { Materials, RequisitionLogs } from './materials';
 import { TimeSheets, Workers } from './workers';
+
 const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1/';
+
 function App() {
   const { loading, setLoading } = useContext(MainContext);
+  const [totals, setTotals] = useState({});
   const [workers, setWorkers] = useState({
     workers: { count: 0, current: 0, next: '', previous: '', num_pages: 0, results: [] },
   });
@@ -72,10 +76,11 @@ function App() {
   const fetchInitialData = async () => {
     try {
       setLoading(true);
-      let keys = ['workers', 'attendance', 'materials', 'requests'];
-      let DATA = { workers, attendance, materials, requests };
+      let keys = ['workers', 'attendance', 'materials', 'requests', 'totals'];
+      let DATA = { workers, attendance, materials, requests, totals };
       let SETTERS = {
         workers: setWorkers,
+        totals: setTotals,
         attendance: setAttendance,
         materials: setMaterials,
         requests: setRequests,
@@ -89,11 +94,19 @@ function App() {
     }
   };
 
+  const brand = (
+    <a className="display-6 text-reset text-decoration-none" href="#">
+      tuzimbe.
+    </a>
+  );
+  
   useEffect(() => fetchInitialData(), []);
+
   return (
-    <div className="container">
+    <div className="container-fluid">
       <Loader loading={loading} />
-      <Tabs>
+      <Tabs brand={brand}>
+        <Dashboard label="At a Glance" data={totals} />
         <Workers
           label="Workers"
           data={workers}

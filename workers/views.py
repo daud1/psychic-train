@@ -1,12 +1,15 @@
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.response import Response
-from paginator import Paginator
 from datetime import date
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+
+from paginator import Paginator
+
 from .models import Worker, WorkerAttendanceLog
-from .serializers import WorkerAttendanceSerializer, WorkerAttendanceReadSerializer, WorkerSerializer
+from .serializers import (WorkerAttendanceReadSerializer,
+                          WorkerAttendanceSerializer, WorkerSerializer)
 
 
 class WorkerViewset(ModelViewSet):

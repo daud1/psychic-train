@@ -2,10 +2,10 @@
 Django settings for tuzimbe_api project.
 """
 import os
-import django_heroku
-import dj_database_url
 from pathlib import Path
 
+import dj_database_url
+import django_heroku
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent

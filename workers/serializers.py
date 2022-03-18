@@ -1,4 +1,5 @@
-from rest_framework.serializers import ModelSerializer, StringRelatedField, ValidationError
+from rest_framework.serializers import (ModelSerializer, StringRelatedField,
+                                        ValidationError)
 
 from .models import Worker, WorkerAttendanceLog
 

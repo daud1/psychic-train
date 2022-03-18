@@ -1,6 +1,7 @@
 
 # Tuzimbe 
-a construction site app to keep track of worker-attendance and building materials at construction sites
+a construction site app to keep track of worker-attendance and building materials at construction sites.
+Visit the site [here](https://daud1.github.io/psychic-train/)
 
 ## SetUp
 
