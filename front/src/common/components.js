@@ -102,7 +102,7 @@ function LineGraph({ label, data, legends }) {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: y,
+          legend: y ? y : '',
           legendOffset: 36,
           legendPosition: 'middle',
         }}
@@ -111,7 +111,7 @@ function LineGraph({ label, data, legends }) {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: x,
+          legend: x ? x : '',
           legendOffset: -40,
           legendPosition: 'middle',
         }}
@@ -152,7 +152,7 @@ function LineGraph({ label, data, legends }) {
   );
 }
 
-function StatsCard({title, stat}) {
+function StatsCard({ title, stat }) {
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
@@ -161,7 +161,7 @@ function StatsCard({title, stat}) {
       <div className="card-body">
         <h5 className="card-title">{title}</h5>
         <h6 className="card-subtitle mb-2 text-muted text-uppercase">Current Total - UGX</h6>
-        <p className="card-text fs-1">{numberWithCommas(stat)}</p>
+        <p className="card-text fs-1">{stat ? numberWithCommas(stat):''}</p>
       </div>
     </div>
   );

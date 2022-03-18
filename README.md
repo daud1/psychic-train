@@ -18,7 +18,8 @@ Visit the demo [here](https://daud1.github.io/psychic-train/).
 
 1. Set up your local database
 
-   See [env.sample](./env.sample) on how to update any env variables or db credentials.
+   See [env.sample](./env.sample) on how to update any env variables or db credentials for the API.
+   For frontend env variables, see [./front/src/.env](.front/src/.env).
 
 ```bash
 # db_name: tuzimbe_dev, db_password: set in .env, owner: postgres
@@ -46,7 +47,11 @@ python manage.py runserver
 ```
 
 5. In a new terminal, change your working directory to `./front`.
-   Install frontend dependencies and start the ReactJS client on port 3000
+   
+   Update the `REACT_APP_API_URL` field in `./front/src/.env` 
+   if your API Server is not running on the default port above.
+
+6. Install frontend dependencies and start the ReactJS client on port 3000
 
 ```bash
 yarn install
